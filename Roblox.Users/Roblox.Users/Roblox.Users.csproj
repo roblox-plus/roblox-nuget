@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootPath>../../</RootPath>
+		<PackageTags>roblox</PackageTags>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="TixFactory.Http.Client" Version="2.*"/>
+	</ItemGroup>
+
+	<Import Project="$(RootPath)build/build.targets"/>
+</Project>

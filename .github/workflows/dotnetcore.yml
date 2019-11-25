@@ -30,5 +30,3 @@ jobs:
       run: |
            nuget sources Add -Name "GPR" -Source https://nuget.pkg.github.com/roblox-plus/index.json -UserName roblox-plus -Password ${{ secrets.github_token }}
            nuget push ./LocalNuGetRepo/**/*.nupkg -Source "GPR" -NoSymbols
-    - name: Publish NuGet packages to nuget.org
-      run: dotnet nuget push ./LocalNuGetRepo/**/*.nupkg --api-key ${{ secrets.nuget_apikey }} --source https://api.nuget.org/v3/index.json --no-symbols true

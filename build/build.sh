@@ -10,6 +10,8 @@ echo "BUILD_NUMBER: $BUILD_NUMBER"
 if [ "$GITHUB_ACTIONS" = "true" ]; then configuration="Release"; else configuration="Debug"; fi
 
 slns=(
+	"Roblox.Users/Roblox.Users.sln"
+	"Roblox.Authentication/Roblox.Authentication.sln"
 )
 
 echo "Building ${#slns[@]} solutions (configuration: $configuration)..."

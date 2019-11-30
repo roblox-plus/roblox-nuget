@@ -1,10 +1,16 @@
 <Project>
+	<!-- Build properties -->
+	<PropertyGroup>
+		<DocumentationFile Condition="'$(DocumentationFile)' == ''">bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+	</PropertyGroup>
+
 	<!-- NuGet properties -->
 	<PropertyGroup>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<RepositoryUrl>https://github.com/roblox-plus/roblox-nuget</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageVersion Condition="'$(PackageVersion)' == ''">2.0.$(BUILD_NUMBER)</PackageVersion>
+		<TixFactoryPackageVersion Condition="'$(TixFactoryPackageVersion)' == ''">$(PackageVersion)</TixFactoryPackageVersion>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<SERVER_BUILD>false</SERVER_BUILD>
 	</PropertyGroup>
@@ -25,6 +31,7 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(SERVER_BUILD)' == 'true'">
 		<LocalNuGetRepository>$(CHECKOUT_DIRECTORY)/LocalNuGetRepo</LocalNuGetRepository>
+		<TixFactoryPackageVersion>2.*</TixFactoryPackageVersion>
 	</PropertyGroup>
 	<PropertyGroup>
 		<RestoreSources>

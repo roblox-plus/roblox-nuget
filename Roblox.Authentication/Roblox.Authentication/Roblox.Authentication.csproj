@@ -8,7 +8,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Roblox.Users" Version="$(PackageVersion)"/>
-		<PackageReference Include="TixFactory.Http.Client" Version="2.*"/>
+		<PackageReference Include="TixFactory.Http.Client" Version="$(TixFactoryPackageVersion)"/>
 	</ItemGroup>
 
 	<Import Project="$(RootPath)build/build.targets"/>

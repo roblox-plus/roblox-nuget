@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="TixFactory.Http.Client" Version="2.*"/>
+		<PackageReference Include="TixFactory.Http.Client" Version="$(TixFactoryPackageVersion)"/>
 	</ItemGroup>
 
 	<Import Project="$(RootPath)build/build.targets"/>

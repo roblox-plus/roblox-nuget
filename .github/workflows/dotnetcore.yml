@@ -25,7 +25,9 @@ jobs:
     - name: unzip tix-factory-nuget.zip
       run: |
         unzip tix-factory-nuget.zip
-        cp -r tix-factory-nuget ./../../../LocalNuGetRepo
+        cp -r nuget ./../../../LocalNuGetRepo
+        rm -rf nuget
+        dir
       shell: bash
       working-directory: ./build
     - name: Setup .NET Core

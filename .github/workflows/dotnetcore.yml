@@ -22,10 +22,39 @@ jobs:
       uses: einaregilsson/build-number@v2
       with:
         token: ${{ secrets.github_token }}
+    - name: Download tix-factory/nuget nuget.zip
+      uses: tix-factory/release-manager@v1
+      with:
+        github_token: ${{ secrets.github_token }}
+        mode: downloadReleaseAsset
+        filePath: ./build/tix-factory-nuget.zip
+        assetName: nuget.zip
+        tag: latest
+    - name: unzip tix-factory-nuget.zip
+      run: |
+        unzip tix-factory-nuget.zip
+        cp -r tix-factory-nuget ./../../../LocalNuGetRepo
+      shell: bash
+      working-directory: ./build
     - name: Build with dotnet
       run: bash build.sh
       shell: bash
       working-directory: ./build
+    - name: Zip NuGet packages
+      run: |
+        cp -r ./../LocalNuGetRepo nuget
+        zip -r nuget.zip nuget
+        dir
+      shell: bash
+      working-directory: ./build
+    - name: Create Release
+      uses: tix-factory/release-manager@v1
+      with:
+        github_token: ${{ secrets.github_token }}
+        mode: uploadReleaseAsset
+        filePath: ./build/nuget.zip
+        assetName: nuget.zip
+        tag: ${{ format('release-number-{0}', env.BUILD_NUMBER) }}
     - name: Publish NuGet packages to github
       run: |
            nuget sources Add -Name "GPR" -Source https://nuget.pkg.github.com/roblox-plus/index.json -UserName roblox-plus -Password ${{ secrets.github_token }}

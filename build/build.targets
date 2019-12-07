@@ -6,11 +6,10 @@
 
 	<!-- NuGet properties -->
 	<PropertyGroup>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild Condition="'$(IsPackable)' != 'false'">true</GeneratePackageOnBuild>
 		<RepositoryUrl>https://github.com/roblox-plus/roblox-nuget</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageVersion Condition="'$(PackageVersion)' == ''">2.0.$(BUILD_NUMBER)</PackageVersion>
-		<TixFactoryPackageVersion Condition="'$(TixFactoryPackageVersion)' == ''">$(PackageVersion)</TixFactoryPackageVersion>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<SERVER_BUILD>false</SERVER_BUILD>
 	</PropertyGroup>
@@ -28,9 +27,11 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(SERVER_BUILD)' != 'true'">
 		<LocalNuGetRepository Condition="'$(LocalNuGetRepository)' == ''">E:/LocalNuGetRepo</LocalNuGetRepository>
+		<TixFactoryPackageVersion Condition="'$(TixFactoryPackageVersion)' == ''">$(PackageVersion)</TixFactoryPackageVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(SERVER_BUILD)' == 'true'">
 		<LocalNuGetRepository>$(CHECKOUT_DIRECTORY)/LocalNuGetRepo</LocalNuGetRepository>
+		<PublishNuGetRepository>$(CHECKOUT_DIRECTORY)/PublishNuGetRepo</PublishNuGetRepository>
 		<TixFactoryPackageVersion>2.*</TixFactoryPackageVersion>
 	</PropertyGroup>
 	<PropertyGroup>
@@ -44,6 +45,7 @@
 	<Target Name="CreateLocalNuGetRpository"
 		BeforeTargets="Restore;CollectPackageReferences">
 		<MakeDir Directories="$(LocalNuGetRepository)" Condition="!Exists('$(LocalNuGetRepository)')" />
+		<MakeDir Directories="$(PublishNuGetRepository)" Condition="'$(SERVER_BUILD)' == 'true' AND !Exists('$(PublishNuGetRepository)')" />
 	</Target>
 
 	<!-- Development -->
@@ -66,7 +68,8 @@
 		<PropertyGroup>
 			<NuGetFile>$(PackageOutputPath)$(PackageId).$(PackageVersion).nupkg</NuGetFile>
 		</PropertyGroup>
-		<Message Text="Copying $(NuGetFile) to $(LocalNuGetRepository)..." Importance="high"/>
+		<Message Text="Copying $(NuGetFile) to $(LocalNuGetRepository) and $(PublishNuGetRepository)..." Importance="high"/>
 		<Copy SourceFiles="$(NuGetFile)" DestinationFolder="$(LocalNuGetRepository)" SkipUnchangedFiles="false" />
+		<Copy SourceFiles="$(NuGetFile)" DestinationFolder="$(PublishNuGetRepository)" SkipUnchangedFiles="false" />
 	</Target>
 </Project>

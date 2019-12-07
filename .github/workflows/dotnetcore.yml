@@ -12,16 +12,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 2.2.108
-    - name: Setup NuGet.exe
-      uses: NuGet/setup-nuget@v1.0.2
-    - name: Build Number Generator
-      uses: einaregilsson/build-number@v2
-      with:
-        token: ${{ secrets.github_token }}
     - name: Download tix-factory/nuget nuget.zip
       uses: tix-factory/release-manager@v1
       with:
@@ -36,6 +26,16 @@ jobs:
         cp -r tix-factory-nuget ./../../../LocalNuGetRepo
       shell: bash
       working-directory: ./build
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 2.2.108
+    - name: Setup NuGet.exe
+      uses: NuGet/setup-nuget@v1.0.2
+    - name: Build Number Generator
+      uses: einaregilsson/build-number@v2
+      with:
+        token: ${{ secrets.github_token }}
     - name: Build with dotnet
       run: bash build.sh
       shell: bash

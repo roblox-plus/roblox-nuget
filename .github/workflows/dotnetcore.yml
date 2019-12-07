@@ -25,7 +25,7 @@ jobs:
     - name: unzip tix-factory-nuget.zip
       run: |
         unzip tix-factory-nuget.zip
-        cp -r nuget ./../../../LocalNuGetRepo
+        cp -r nuget ./../LocalNuGetRepo
         rm -rf nuget
         dir
       shell: bash
@@ -44,6 +44,9 @@ jobs:
       run: bash build.sh
       shell: bash
       working-directory: ./build
+    - name: Verify NuGet packages
+      run: dir
+      working-directory: ./LocalNuGetRepo
     - name: Zip NuGet packages
       run: |
         cp -r ./../LocalNuGetRepo nuget

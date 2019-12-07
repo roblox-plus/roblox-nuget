@@ -20,6 +20,8 @@ jobs:
         filePath: ./build/tix-factory-nuget.zip
         assetName: nuget.zip
         tag: latest
+        repo: nuget
+        owner: tix-factory
     - name: unzip tix-factory-nuget.zip
       run: |
         unzip tix-factory-nuget.zip

@@ -7,8 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="TixFactory.Http.Client" Version="$(TixFactoryPackageVersion)"/>
+		<PackageReference Include="TixFactory.Configuration" Version="$(TixFactoryPackageVersion)" />
+		<PackageReference Include="TixFactory.Http.Client" Version="$(TixFactoryPackageVersion)" />
+		<PackageReference Include="TixFactory.Serialization.Json" Version="$(TixFactoryPackageVersion)" />
 	</ItemGroup>
 
-	<Import Project="$(RootPath)build/build.targets"/>
+	<Import Project="$(RootPath)build/build.targets" />
 </Project>

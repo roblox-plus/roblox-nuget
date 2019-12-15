@@ -5,22 +5,19 @@ set -e
 
 echo "START build.sh"
 echo "BUILD_NUMBER: $BUILD_NUMBER"
+start=`date +%s`
 
-# https://stackoverflow.com/a/25119904/1663648
-if [ "$GITHUB_ACTIONS" = "true" ]; then configuration="Release"; else configuration="Debug"; fi
+if [ "$GITHUB_ACTIONS" = "true" ]
+then
+	configuration="Release"
+else
+	configuration="Debug"
+	
+	sh generate_build_proj.sh
+fi
 
-slns=(
-	"Roblox.Users/Roblox.Users.sln"
-	"Roblox.Authentication/Roblox.Authentication.sln"
-)
+dotnet msbuild "./build.proj" -t:Build -maxcpucount:64 -p:Configuration=$configuration
 
-echo "Building ${#slns[@]} solutions (configuration: $configuration)..."
-
-# https://stackoverflow.com/a/18898718/1663648
-for sln in "${slns[@]}"
-do
-    echo "Building $sln..."
-	dotnet build ./../$sln -p:Version=2.0.$BUILD_NUMBER --configuration $configuration
-done
-
-echo "END build.sh"
+end=`date +%s`
+runtime=$((end-start))
+echo "END build.sh (runtime: $runtime seconds)"

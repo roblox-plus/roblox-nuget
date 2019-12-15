@@ -2,6 +2,7 @@
 	<!-- Build properties -->
 	<PropertyGroup>
 		<DocumentationFile Condition="'$(DocumentationFile)' == ''">bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+		<LangVersion>7.1</LangVersion>
 	</PropertyGroup>
 
 	<!-- NuGet properties -->
@@ -71,5 +72,14 @@
 		<Message Text="Copying $(NuGetFile) to $(LocalNuGetRepository) and $(PublishNuGetRepository)..." Importance="high"/>
 		<Copy SourceFiles="$(NuGetFile)" DestinationFolder="$(LocalNuGetRepository)" SkipUnchangedFiles="false" />
 		<Copy SourceFiles="$(NuGetFile)" DestinationFolder="$(PublishNuGetRepository)" SkipUnchangedFiles="false" />
+	</Target>
+
+	<Target Name="CopyToPublishFolder"
+			AfterTargets="Publish">
+		<ItemGroup>
+			<_CopyItems Include="$(OutputPath)publish\**\*.*" />
+		</ItemGroup>
+		<Message Text="Copying publish directory...%0a%09Source: $(OutputPath)publish%0a%09Destination: $(RootPath)build/publish/$(AssemblyName)" Importance="high"/>
+		<Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(RootPath)build/publish/$(AssemblyName)/%(RecursiveDir)" />
 	</Target>
 </Project>

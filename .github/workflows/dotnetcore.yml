@@ -23,11 +23,7 @@ jobs:
         repo: nuget
         owner: tix-factory
     - name: unzip tix-factory-nuget.zip
-      run: |
-        unzip tix-factory-nuget.zip
-        cp -r nuget ./../LocalNuGetRepo
-        rm -rf nuget
-        dir
+      run: sh nuget_unzip.sh
       shell: bash
       working-directory: ./build
     - name: Setup .NET Core
@@ -40,18 +36,17 @@ jobs:
       uses: einaregilsson/build-number@v2
       with:
         token: ${{ secrets.github_token }}
+    - name: Generate msbuild project file
+      uses: tix-factory/msbuild-project-generator@v1
+      with:
+        directory: ./
+        projectFile: ./build/build.proj
     - name: Build with dotnet
-      run: bash build.sh
+      run: sh build.sh
       shell: bash
       working-directory: ./build
-    - name: Verify NuGet packages
-      run: dir
-      working-directory: ./LocalNuGetRepo
-    - name: Zip NuGet packages
-      run: |
-        cp -r ./../LocalNuGetRepo nuget
-        zip -r nuget.zip nuget
-        dir
+    - name: Publish artifacts
+      run: sh publish.sh
       shell: bash
       working-directory: ./build
     - name: Create Release
@@ -59,10 +54,18 @@ jobs:
       with:
         github_token: ${{ secrets.github_token }}
         mode: uploadReleaseAsset
+        filePath: ./build/publish.zip
+        assetName: publish.zip
+        tag: ${{ format('release-number-{0}', env.BUILD_NUMBER) }}
+    - name: Attach NuGet packages to release
+      uses: tix-factory/release-manager@v1
+      with:
+        github_token: ${{ secrets.github_token }}
+        mode: uploadReleaseAsset
         filePath: ./build/nuget.zip
         assetName: nuget.zip
         tag: ${{ format('release-number-{0}', env.BUILD_NUMBER) }}
-    - name: Publish NuGet packages to github
-      run: |
-           nuget sources Add -Name "GPR" -Source https://nuget.pkg.github.com/roblox-plus/index.json -UserName roblox-plus -Password ${{ secrets.github_token }}
-           nuget push ./PublishNuGetRepo/**/*.nupkg -Source "GPR" -NoSymbols
+    - name: Publish NuGet packages
+      run: sh nuget_publish.sh ${{ secrets.github_token }}
+      shell: bash
+      working-directory: ./build
